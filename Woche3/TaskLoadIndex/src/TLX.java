@@ -13,6 +13,7 @@ public class TLX {
 	private Integer[] factors_combined = {0,1,0,2,0,3,0,4,0,5,1,2,1,3,1,4,1,5,2,3,2,4,2,5,3,4,3,5,4,5}; 
 	
 	private Double avg;
+	private Double sum = 0.0;
 	
 	public TLX(){
 		md = new MentalDemand();
@@ -32,7 +33,7 @@ public class TLX {
 	}
 	
 	public void calculateAVG(){
-		Double sum = 0.0, weight = 0.0;
+		Double weight = 0.0;
 		
 		for(Factor x : factors){
 			sum += x.calculateProduct();
@@ -43,7 +44,7 @@ public class TLX {
 	}
 	
 	public Double getAVG(){
-		return avg;
+		return Math.floor(avg);
 	}
 	
 	public LinkedList<Factor> getFactors(){
@@ -52,5 +53,9 @@ public class TLX {
 	
 	public Integer[] getFactorsCombined(){
 		return factors_combined;
+	}
+	
+	public Double getSum(){
+		return Math.floor(sum);
 	}
 }

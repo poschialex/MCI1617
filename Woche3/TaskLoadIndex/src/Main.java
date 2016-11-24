@@ -1,23 +1,33 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	private Stage primaryStage;
+	private Stage instructionStage;
+	
     private Pane rootLayout;
     private Pane weightLayout;
     private Pane analysisLayout;
+    private Pane instructionLayout;
     
     private TLX tlx;
     
@@ -54,6 +64,28 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        Button instructions = (Button) primaryStage.getScene().lookup("#inst");
+        instructions.setOnAction(new EventHandler<ActionEvent>() {
+            @Override 
+            public void handle(ActionEvent e) {
+            	instructionStage = new Stage();
+            	
+            	FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Main.class.getResource("instructions.fxml"));
+                try {
+					instructionLayout = (Pane) loader.load();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+                Scene scene = new Scene(instructionLayout);
+                instructionStage.setScene(scene);
+                instructionStage.setTitle("TLX Instructions");
+                instructionStage.show();
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -109,6 +141,28 @@ public class Main extends Application {
                 sumWeights();
             }
         });
+        
+        Button instructions = (Button) primaryStage.getScene().lookup("#inst");
+        instructions.setOnAction(new EventHandler<ActionEvent>() {
+            @Override 
+            public void handle(ActionEvent e) {
+            	instructionStage = new Stage();
+            	
+            	FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Main.class.getResource("instructions.fxml"));
+                try {
+					instructionLayout = (Pane) loader.load();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+                Scene scene = new Scene(instructionLayout);
+                instructionStage.setScene(scene);
+                instructionStage.setTitle("TLX Instructions");
+                instructionStage.show();
+            }
+        });
     }
     
     private void sumWeights(){
@@ -142,5 +196,81 @@ public class Main extends Application {
     	
     	Label avg = (Label) primaryStage.getScene().lookup("#avg");
     	avg.setText(tlx.getAVG().toString());
+    	
+    	Label weight = (Label) primaryStage.getScene().lookup("#weight");
+    	weight.setText("15");
+    	
+    	Label sum = (Label) primaryStage.getScene().lookup("#sum");
+    	sum.setText(tlx.getSum().toString());
+    	
+    	final ObservableList f_data = 
+    	        FXCollections.observableArrayList();
+    	final ObservableList r_data = 
+    	        FXCollections.observableArrayList();
+    	final ObservableList w_data = 
+    	        FXCollections.observableArrayList();
+    	final ObservableList p_data = 
+    	        FXCollections.observableArrayList();
+    	
+    	ListView f_list = (ListView) primaryStage.getScene().lookup("#factor_list");
+    	ListView r_list = (ListView) primaryStage.getScene().lookup("#rating_list");
+    	ListView w_list = (ListView) primaryStage.getScene().lookup("#weight_list");
+    	ListView p_list = (ListView) primaryStage.getScene().lookup("#product_list");
+    	
+    	for(Factor f : tlx.getFactors()){
+    		f_data.add(f.title);
+    		r_data.add(f.getRating());
+    		w_data.add(f.getWeight());
+    		p_data.add(f.getProduct());
+    	}
+
+    	f_list.setItems(f_data);
+    	r_list.setItems(r_data);
+    	w_list.setItems(w_data);
+    	p_list.setItems(p_data);
+    	
+    	Button export = (Button) primaryStage.getScene().lookup("#export");
+    	export.setOnAction(new EventHandler<ActionEvent>() {
+            @Override 
+            public void handle(ActionEvent e) {
+            	save();
+            }
+        });
+    	
+    	Button instructions = (Button) primaryStage.getScene().lookup("#inst");
+        instructions.setOnAction(new EventHandler<ActionEvent>() {
+            @Override 
+            public void handle(ActionEvent e) {
+            	instructionStage = new Stage();
+            	
+            	FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Main.class.getResource("instructions.fxml"));
+                try {
+					instructionLayout = (Pane) loader.load();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+                Scene scene = new Scene(instructionLayout);
+                instructionStage.setScene(scene);
+                instructionStage.setTitle("TLX Instructions");
+                instructionStage.show();
+            }
+        });
+    }
+    
+    public void save(){
+    	try{
+    	    PrintWriter writer = new PrintWriter("tlx_ergebnis.txt", "UTF-8");
+    	    writer.println("TLX");
+    	    for(Factor f : tlx.getFactors()){
+    	    	writer.println(f.title + ": Rating is " + f.getRating() + ", Weight is " + f.getWeight() + ", Product is " + f.getProduct());
+    	    }
+    	    writer.println("Results: Sum is " + tlx.getSum() + ", Weights is 15, AVG is " + tlx.getAVG());
+    	    writer.close();
+    	} catch (Exception e) {
+    	   // do something
+    	}
     }
 }

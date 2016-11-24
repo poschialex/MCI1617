@@ -14,6 +14,10 @@ public class Factor {
 		this.rating = rating;
 	}
 	
+	public Double getRating(){
+		return Math.floor(rating);
+	}
+	
 	public void increaseWeight(){
 		this.weight++;
 	}
@@ -21,6 +25,10 @@ public class Factor {
 	public Double calculateProduct(){
 		this.product = rating*weight;
 		return product;
+	}
+	
+	public Double getProduct(){
+		return Math.floor(product);
 	}
 	
 	public Integer getWeight(){
