@@ -1,0 +1,8 @@
+TLX
+Mental Demand: Rating is 55.0, Weight is 0, Product is 0.0
+Physical Demand: Rating is 30.0, Weight is 1, Product is 30.0
+Temporal Demand: Rating is 66.0, Weight is 2, Product is 132.0
+Frustration: Rating is 59.0, Weight is 3, Product is 177.0
+Effort: Rating is 30.0, Weight is 4, Product is 122.0
+Performance: Rating is 39.0, Weight is 5, Product is 198.0
+Results: Sum is 660.0, Weights is 15, AVG is 44.0
